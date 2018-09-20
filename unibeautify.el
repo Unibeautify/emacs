@@ -73,7 +73,7 @@
       (widen)
       (let ((language (unibeautify-language-from-buffer))
             (inbuf (current-buffer))
-            (input (buffer-substring-no-properties (point-min) (point-max)))
+            (input (buffer-string))
             errput errorp first-diff no-chg output)
         (with-temp-buffer
           (let* ((errfile (make-temp-file "unibeautify-emacs-"))
@@ -83,13 +83,13 @@
             (setq errput (with-temp-buffer
                            (insert-file-contents errfile)
                            (delete-file errfile)
-                           (buffer-substring (point-min) (point-max)))
+                           (buffer-string))
                   errorp (not (equal 0 status))
                   first-diff (abs (compare-buffer-substrings inbuf nil nil
                                                              nil nil nil))
                   no-chg (or errorp (= 0 first-diff))
                   output (unless no-chg
-                           (buffer-substring (point-min) (point-max))))))
+                           (buffer-string)))))
         (cond (errorp
                (message "Syntax error"))
               (no-chg
