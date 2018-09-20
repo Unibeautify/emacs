@@ -17,6 +17,7 @@
 ;;; Code:
 
 (defun unibeautify-language-from-buffer ()
+  "Internal function to get GitHub Linguist langauge name for current buffer."
   (or (case major-mode
         (c++-mode "C++")
         (c-mode "C")
@@ -68,7 +69,7 @@
   "Auto-format the source code in the current buffer using Unibeautify."
   (interactive)
   (unless (executable-find "unibeautify")
-    (error "Please install the 'unibeautify' executable."))
+    (error "Please install the 'unibeautify' executable"))
   (save-excursion
     (save-restriction
       (widen)
