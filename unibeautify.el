@@ -51,6 +51,15 @@
         (typescript-mode "TypeScript")
         (typescript-tsx-mode "TypeScript")
         (vue-mode "Vue")
+        (web-mode
+         (when (equal "none" (symbol-value 'web-mode-engine))
+           (let ((ct (symbol-value 'web-mode-content-type)))
+             (cond ((equal ct "css") "CSS")
+                   ((equal ct "html") "HTML")
+                   ((equal ct "javascript") "JavaScript")
+                   ((equal ct "json") "JSON")
+                   ((equal ct "jsx") "JSX")
+                   ((equal ct "xml") "XML")))))
         (xml-mode "XML"))
       (error "Don't know how to format %S code" major-mode)))
 
