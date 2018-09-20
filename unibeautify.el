@@ -63,6 +63,7 @@
         (xml-mode "XML"))
       (error "Don't know how to format %S code" major-mode)))
 
+;;;###autoload
 (defun unibeautify ()
   "Auto-format the source code in the current buffer using Unibeautify."
   (interactive)
