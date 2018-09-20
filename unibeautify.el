@@ -36,7 +36,7 @@
     (scss-mode "SCSS")
     (typescript-mode "TypeScript")
     (typescript-tsx-mode "TypeScript")
-    (vue "Vue")
+    (vue-mode "Vue")
     (t (error "Don't know how to format %S code" major-mode))))
 
 (defun unibeautify ()
