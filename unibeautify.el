@@ -14,6 +14,17 @@
 ;; Lets you auto-format source code in numerous languages using
 ;; Unibeautify.
 ;;
+;; Unibeautify is a project to create a universal interface to as many
+;; existing source code beautifiers as possible. It is installed from
+;; the npm package manager. Individual beautifiers are supplied by
+;; their own npm packages. Installation instructions:
+;; https://unibeautify.com/docs/editor-emacs
+;;
+;; Unibeautify, and this Emacs package, are still work in
+;; progress. They are already usable for basic tasks but design and
+;; implementation work is still ongoing for the advanced
+;; features. Development happens at https://github.com/Unibeautify
+;;
 ;;; Code:
 
 (defun unibeautify-language-from-buffer ()
