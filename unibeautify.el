@@ -81,7 +81,10 @@
           (let* ((errfile (make-temp-file "unibeautify-emacs-"))
                  (status (apply #'call-process-region input nil
                                 "unibeautify" nil (list t errfile)
-                                nil (list "--language" language))))
+                                nil (append (list "--language" language)
+                                            (when (buffer-file-name inbuf)
+                                              (list "--file-path"
+                                                    (buffer-file-name inbuf)))))))
             (setq errput (with-temp-buffer
                            (insert-file-contents errfile)
                            (delete-file errfile)
