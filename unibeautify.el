@@ -27,6 +27,16 @@
 ;;
 ;;; Code:
 
+(defun unibeautify-preserve-line-number (thunk)
+  "Internal function to preserve line and column number across edits."
+  (let ((old-line-number (line-number-at-pos nil t))
+        (old-column (current-column)))
+    (funcall thunk)
+    (goto-char (point-min))
+    (forward-line (1- old-line-number))
+    (let ((line-length (- (point-at-eol) (point-at-bol))))
+      (goto-char (+ (point) (min old-column line-length))))))
+
 (defun unibeautify-language-from-buffer ()
   "Internal function to get GitHub Linguist langauge name for current buffer."
   (or (case major-mode
@@ -87,7 +97,7 @@
       (let ((language (unibeautify-language-from-buffer))
             (inbuf (current-buffer))
             (input (buffer-string))
-            errput errorp first-diff no-chg output)
+            errput errorp no-chg output)
         (with-temp-buffer
           (let* ((errfile (make-temp-file "unibeautify-emacs-"))
                  (status (apply #'call-process-region input nil
@@ -101,9 +111,9 @@
                            (delete-file errfile)
                            (buffer-string))
                   errorp (not (equal 0 status))
-                  first-diff (abs (compare-buffer-substrings inbuf nil nil
-                                                             nil nil nil))
-                  no-chg (or errorp (= 0 first-diff))
+                  no-chg (or errorp
+                             (= 0 (compare-buffer-substrings inbuf nil nil
+                                                             nil nil nil)))
                   output (unless no-chg
                            (buffer-string)))))
         (cond (errorp
@@ -112,9 +122,10 @@
                (message "Already formatted"))
               (t
                (message "Reformatted!")
-               (erase-buffer)
-               (insert output)
-               (goto-char first-diff)))
+               (unibeautify-preserve-line-number
+                (lambda ()
+                  (erase-buffer)
+                  (insert output)))))
         (with-current-buffer (get-buffer-create "*unibeautify-errors*")
           (erase-buffer)
           (unless (= 0 (length errput))
